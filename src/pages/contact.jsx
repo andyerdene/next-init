@@ -1,6 +1,8 @@
-export default function Page(props) {
-  console.log("props: ", props);
-  return <div>{props.data.title}</div>;
+import React from "react";
+
+export default function Page(abc) {
+  console.log("props: ", abc);
+  return <div>{abc.data.title}</div>;
 }
 
 export const getStaticProps = async (context) => {

@@ -1,33 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 
-export default function Page() {
-  const router = useRouter();
-  const [todo, setTodos] = useState();
-  const { id } = router.query;
+export default function Page(props) {
+  const { data } = props;
 
-  useEffect(() => {
-    const getData = async () => {
-      const res = await fetch(
-        `https://jsonplaceholder.typicode.com/todos/${id}`
-      );
-      const data = await res.json();
-      setTodos(data);
-    };
-    if (id) {
-      getData();
-    }
-  }, [id]);
-
-  if (!id) return <div>Loading...</div>;
+  async function fetchClient() {
+    await fetch(`https://jsonplaceholder.typicode.com/todos/1`);
+  }
 
   return (
     <div className="p-[100px] text-2xl">
       <button className="bg-gray-500" onClick={() => router.push("/product")}>
         Home
       </button>
-      <h1 className="text-2xl">Title: {todo?.title}</h1>
-      <p>Completed: {todo?.completed ? "True" : "False"}</p>
+      <h1>{data.title}</h1>
+      <h2>{data.id}</h2>
+      <h3>{data.completed ? "True" : "False"}</h3>
+      <button onClick={fetchClient}>Client Fetch</button>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  const { query } = context;
+  console.log(query);
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/todos/${query.id}`
+  );
+  const data = await response.json();
+  return {
+    props: {
+      data,
+    },
+  };
 }
