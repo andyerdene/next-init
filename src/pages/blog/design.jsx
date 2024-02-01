@@ -9,7 +9,6 @@ export default function Page({ desings }) {
 
   async function loadMoreHandler() {
     setLoading(true);
-    console.log(pageNumber);
     const response = await fetch(
       `https://dev.to/api/articles?tag=design&per_page=3&page=${pageNumber}`
     );
@@ -31,11 +30,13 @@ export default function Page({ desings }) {
       <SubHeader />
       <div className="flex flex-wrap gap-5">
         {articles.map((article) => {
+          console.log(article);
           return (
             <Card
               key={`${article.title}-${article.id}`}
               title={article.title}
               img_url={article.social_image}
+              id={article.id}
             />
           );
         })}
